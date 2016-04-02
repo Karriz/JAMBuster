@@ -1,0 +1,46 @@
+<dom-module id="test-app">
+<template>
+<style type="text/css">
+    .container {
+        background: white;
+        margin: 0px;
+        padding: 10px;
+        box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.15);
+    }
+
+    paper-button {
+        text-transform: none;
+        width: 250px;
+        padding: 5px;
+        margin: 5px;
+    }
+</style>
+
+    <div class="container layout vertical">
+        <div class="layout vertical center justified" id="message">
+        </div>
+            People [[ people ]]
+        </div>
+    </div>
+
+</template>
+<script>
+    Polymer({
+        is: "test-app",
+        
+        properties :
+        {
+            people : 
+            {
+                type : Number,
+                value : 0
+            }
+        },
+        
+        
+        incrementPeople : function() {
+            this.people = this.people + 1;
+        }
+    });
+</script>
+</dom-module>

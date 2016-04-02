@@ -1,0 +1,499 @@
+var Test = MapgetsApplication.$extend(
+{
+    __init__ : function()
+    {
+        this.$super("Test");
+        this.app = null;
+        this.rts = null;
+
+        MapgetsApplication.loadDependencies(this,
+            "helper.js",
+            "test-elements.html"
+        ).done(this.start.bind(this));
+    },
+
+    /** 
+        Script destroy/unload handler. Called automatically 
+        by the framework when the application is closed.
+    */
+    onScriptDestroyed : function()
+    {
+        this.log.info("Stopping Test");
+    },
+
+    start : function()
+    {
+        if (this.app)
+            return;
+            
+        JamBusterHelper.init({
+            coordinate : {
+                lat: 65.01058690876684, 
+                lon: 25.488935890527827
+            },
+            rts : {
+                distance : 3000
+            },
+            onCameraReady : this.onCameraReady.bind(this)
+        });
+
+        this.data = {};
+        this.app = document.createElement("test-app");
+
+        this.setApplicationElement(this.app, this.resolveRef("files/logo.png"));
+    },
+    
+    onCameraReady : function(camera)
+    {
+        var bbox = new MeshmoonGeoBoundingBox({    
+            "SouthWest": {
+              "Latitude": 65.00406559200162,
+              "Longitude": 25.450428524729677
+            },
+            "NorthEast": {
+              "Latitude": 65.0203875852913,
+              "Longitude": 25.494754341294588
+            }
+        });
+        
+        this.plugin.location.view(bbox, { view2D : false });
+        
+        /*var shape = new MeshmoonGeoShape({ object : {
+          "type": "Polygon",
+          "value": [
+            {
+              "Latitude": 65.00742308644347,
+              "Longitude": 25.467445698639864
+            },
+            {
+              "Latitude": 65.00743242051239,
+              "Longitude": 25.47891707510294
+            },
+            {
+              "Latitude": 65.0116965070241,
+              "Longitude": 25.483592929958
+            },
+            {
+              "Latitude": 65.01401916199137,
+              "Longitude": 25.47762799342807
+            },
+            {
+              "Latitude": 65.01094061350653,
+              "Longitude": 25.468277145062558
+            },
+            {
+              "Latitude": 65.0147691212957,
+              "Longitude": 25.456044017374225
+            },
+            {
+              "Latitude": 65.0104132836969,
+              "Longitude": 25.452526447842295
+            }
+          ],
+          "properties": {
+            "id": "1A9326DB-6E64-4BCF-B597-42B16401A20E"
+          },
+          "options": {
+            "autoCreateMesh": true,
+            "autoUpdateGeometry": true,
+            "visualizePoints": false,
+            "visualizeLines": true,
+            "visualizeDistances": false,
+            "mainColor": "red",
+            "activeColor": "#E95D0F",
+            "mainOpacity": 0.5,
+            "pointOpacity": 0.9
+          }
+        }}
+        );*/
+        this.camerathumbnails = [];
+        
+        // traffic counters
+        //this.updateTrafficCounters();
+
+        // weather cameras
+        this.updateWeatherCameras();
+        
+        //parking spots
+        this.updateParkingSpots();
+        
+        //speed counters
+        this.updateSpeedCounters();
+    },
+    
+    updateTrafficCounters : function() {
+        $.getJSON("http://www.oulunliikenne.fi/public_traffic_api/eco_traffic/eco_counters.php").done(function(data) {
+            this.data.trafficCounters = this.parseTrafficCounters(data);
+            this.showTrafficCounters();
+        }.bind(this));
+    },
+    
+    updateWeatherCameras : function() {
+        $.get("http://www.oulunliikenne.fi/rss/weather_camera/camera.xml").done(function(data) {
+            //console.warn(data);
+                    
+            this.data.weatherCameras = [];
+            var that = this;
+            $($(data).find("channel")).find("item").each(function () { // or "item" or whatever suits your feed
+                that.parseXML($(this),that.data.weatherCameras);
+            });
+            this.showWeatherCameras();
+        }.bind(this));
+    },
+    
+    updateParkingSpots : function() {
+        $.get("http://www.oulunliikenne.fi/rss/parking/parking.xml").done(function(data) {
+            //console.warn(data);
+                    
+            this.data.parkingSpots = [];
+            var that = this;
+            $($(data).find("channel")).find("item").each(function () { // or "item" or whatever suits your feed
+                that.parseXML($(this),that.data.parkingSpots);
+            });
+            this.showParkingSpots();
+        }.bind(this));
+    },
+    
+    updateSpeedCounters : function() {
+        $.get("http://www.oulunliikenne.fi/rss/lam/lam.xml").done(function(data) {
+            //console.warn(data);
+                    
+            this.data.speedCounters = [];
+            var that = this;
+            $($(data).find("channel")).find("item").each(function () { // or "item" or whatever suits your feed
+                that.parseXML($(this),that.data.speedCounters);
+            });
+            this.showSpeedCounters();
+        }.bind(this));
+    },
+    
+    parseXML : function (el,target) {
+        var spec = {
+            "title" : "title",
+            "link"  : "link",
+            "point" : "coord",
+            "pubDate" : "date",
+            "description" : "description"
+        };
+        var obj = {};
+
+        for (var prop in spec)
+        {
+            var value = el.find(prop).text();
+            if (prop === "point")
+                value = value.split(" ");
+            if (prop === "pubDate")
+                value = new Date(value)
+            obj[spec[prop]] = value;
+        }
+        target.push(obj);
+
+    },
+    
+    parseTrafficCounters : function(data) {
+        for (var i=0; i<data.ecostation.length; i++) {
+            var geom = data.ecostation[i].geom;
+            
+            data.ecostation[i].geom = JSON.parse(geom);
+        }
+        console.warn(data.ecostation);
+        return data.ecostation;
+    },
+    
+    showTrafficCounters : function()
+    {
+        if (!this.data.shapeTrafficCounters)
+        {
+            this.data.shapeTrafficCounters = new MeshmoonGeoShape({
+                type : "points",           
+                "autoCreateMesh": true,
+                "autoUpdateGeometry": true,
+                "visualizePoints": true,
+                "visualizeLines": true,
+                "visualizeDistances": false,
+                "mainColor": "red",
+                "activeColor": "#E95D0F",
+                "mainOpacity": 0.5,
+                "pointOpacity": 0.9
+
+            });
+        }
+        else
+            this.data.shapeTrafficCounters.clear();
+            
+        var coords = [];
+        for(var i=0; i < this.data.trafficCounters.length; i++) {
+            var obj = this.data.trafficCounters[i];
+            
+            var coord = new MeshmoonGeoCoordinate({ lon: obj.geom.coordinates[0], lat: obj.geom.coordinates[1] });
+            var elem = document.createElement("div");
+            elem.innerHTML = '<img src="' + this.resolveRef("files/PedestrialSign.png") + '" width="24" height="24">';
+            //elem.style.textAlign = "center";
+            var that = this;
+            elem.id = i.toString();
+            /*elem.onclick = function () {
+                that.pedestrianClick(this.id);
+            };*/
+            
+            var stuff = this.createBillboard(elem, coord.toWorld());
+            
+            console.warn(stuff.bbElem);
+            stuff.bbElem.hover(function() {
+                this.that.pedestrianStart(this.index);
+            }.bind({ that : that, index : i }),function() {
+                this.that.pedestrianEnd(this.index);
+            }.bind({ that : that, index : i }));
+            
+            coords.push( new MeshmoonGeoCoordinate({ lon: obj.geom.coordinates[0], lat: obj.geom.coordinates[1] }) );
+        }
+        this.data.shapeTrafficCounters.add(coords);
+    },
+    
+    showWeatherCameras : function()
+    {
+        if (!this.data.shapeWeatherCameras)
+        {
+            this.data.shapeWeatherCameras = new MeshmoonGeoShape({
+                type : "points",           
+                "autoCreateMesh": true,
+                "autoUpdateGeometry": true,
+                "visualizePoints": true,
+                "visualizeLines": true,
+                "visualizeDistances": false,
+                "mainColor": "blue",
+                "activeColor": "#E95D0F",
+                "mainOpacity": 0.5,
+                "pointOpacity": 0.9
+
+            });
+        }
+        else
+            this.data.shapeWeatherCameras.clear();
+            
+        var coords = [];
+        for(var i=0; i < this.data.weatherCameras.length; i++) {
+            var obj = this.data.weatherCameras[i];
+            
+            var coord = new MeshmoonGeoCoordinate({ lon: Number(obj.coord[0]), lat: Number(obj.coord[1]) });
+            var elem = document.createElement("div");
+            elem.innerHTML = '<img src="' + this.resolveRef("files/JB-Camera1.png") + '" width="24" height="24">';
+            //elem.style.textAlign = "center";
+            var that = this;
+            elem.id = i.toString();
+            /*elem.onclick = function () {
+                that.cameraClick(this.id);
+            };*/
+            
+            var stuff = this.createBillboard(elem, coord.toWorld());
+            
+            console.warn(stuff.bbElem);
+            stuff.bbElem.hover(function() {
+                this.that.cameraStart(this.index);
+            }.bind({ that : that, index : i }),function() {
+                this.that.cameraEnd(this.index);
+            }.bind({ that : that, index : i }));
+            
+            coords.push( new MeshmoonGeoCoordinate({ lon: Number(obj.coord[0]), lat: Number(obj.coord[1]) }) );
+        }
+        this.data.shapeWeatherCameras.add(coords);
+    },
+    
+    showParkingSpots : function()
+    {
+        if (!this.data.shapeParkingSpots)
+        {
+            this.data.shapeParkingSpots = new MeshmoonGeoShape({
+                type : "points",           
+                "autoCreateMesh": true,
+                "autoUpdateGeometry": true,
+                "visualizePoints": true,
+                "visualizeLines": true,
+                "visualizeDistances": false,
+                "mainColor": "green",
+                "activeColor": "#E95D0F",
+                "mainOpacity": 0.5,
+                "pointOpacity": 0.9
+
+            });
+        }
+        else
+            this.data.shapeParkingSpots.clear();
+            
+        var coords = [];
+        for(var i=0; i < this.data.parkingSpots.length; i++) {
+            var obj = this.data.parkingSpots[i];
+            
+            var coord = new MeshmoonGeoCoordinate({ lon: Number(obj.coord[0]), lat: Number(obj.coord[1]) });
+            var elem = document.createElement("div");
+            elem.innerHTML = '<img src="' + this.resolveRef("files/ParkingSign.png") + '" width="24" height="24">';
+            //elem.style.textAlign = "center";
+            var that = this;
+            elem.id = i.toString();
+            /*elem.onclick = function () {
+                //that.parkingClick(this.id);
+            };*/
+            
+            
+            var stuff = this.createBillboard(elem, coord.toWorld());
+            
+            console.warn(stuff.bbElem);
+            stuff.bbElem.hover(function() {
+                this.that.parkingStart(this.index);
+            }.bind({ that : that, index : i }),function() {
+                this.that.parkingEnd(this.index);
+            }.bind({ that : that, index : i }));
+            
+            coords.push( new MeshmoonGeoCoordinate({ lon: Number(obj.coord[0]), lat: Number(obj.coord[1]) }) );
+        }
+        this.data.shapeParkingSpots.add(coords);
+    },
+    
+    showSpeedCounters : function()
+    {
+        if (!this.data.shapeSpeedCounters)
+        {
+            this.data.shapeSpeedCounters = new MeshmoonGeoShape({
+                type : "points",           
+                "autoCreateMesh": true,
+                "autoUpdateGeometry": true,
+                "visualizePoints": true,
+                "visualizeLines": true,
+                "visualizeDistances": false,
+                "mainColor": "orange",
+                "activeColor": "#E95D0F",
+                "mainOpacity": 0.5,
+                "pointOpacity": 0.9
+
+            });
+        }
+        else
+            this.data.shapeSpeedCounters.clear();
+            
+        var coords = [];
+        for(var i=0; i < this.data.speedCounters.length; i++) {
+            var obj = this.data.speedCounters[i];
+            var coord = new MeshmoonGeoCoordinate({ lon: Number(obj.coord[0]), lat: Number(obj.coord[1]) });
+            var elem = document.createElement("div");
+            elem.innerHTML = '<img src="' + this.resolveRef("files/JB-Speed1.png") + '" width="24" height="24">';
+            //elem.style.textAlign = "center";
+            var that = this;
+            elem.id = i.toString();
+            /*elem.onclick = function () {
+                that.speedClick(this.id);
+            };*/
+            
+            var stuff = this.createBillboard(elem, coord.toWorld());
+            
+            console.warn(stuff.bbElem);
+            stuff.bbElem.hover(function() {
+                this.that.speedStart(this.index);
+            }.bind({ that : that, index : i }),function() {
+                this.that.speedEnd(this.index);
+            }.bind({ that : that, index : i }));
+            coords.push(coord);
+        }
+        this.data.shapeSpeedCounters.add(coords);
+    },
+    
+    createBillboard: function(elem, pos, minsize, maxsize)
+    {
+        var entity = Tundra.scene.createLocalEntity(["Placeable", "HtmlBillboard"]);
+        if (!entity)
+            return null;
+
+        entity.htmlbillboard.element = elem;
+        entity.htmlbillboard.scaleAccordingToDistance = 1/100000;
+        entity.htmlbillboard.maxDistance = 30000;
+        entity.htmlbillboard.offset.y = 10;
+        entity.htmlbillboard.minScale = 0.5;
+        entity.htmlbillboard.maxScale = 10;
+        entity.htmlbillboard.fadeOut = false;
+        
+        entity.placeable.setPosition(pos);
+
+        return { entity : entity, bbElem : entity.htmlbillboard.element };
+    },
+    
+    speedClick : function(i) {
+        console.warn("Clicked "+this.data.speedCounters[Number(i)].title);
+        var obj = this.data.speedCounters[Number(i)];
+    },
+    
+    speedStart : function(i) {
+        console.warn("Starting hover "+this.data.speedCounters[Number(i)].title);
+        var obj = this.data.speedCounters[Number(i)];
+        
+        var coord = new MeshmoonGeoCoordinate({ lon: Number(obj.coord[0]), lat: Number(obj.coord[1]) });
+        
+        var elem = document.createElement("div");
+        elem.innerHTML = obj.title+'<br>'+obj.description;
+        var stuff = this.createBillboard(elem, coord.toWorld());
+    },
+    
+    speedEnd : function(i) {
+        console.warn("Ending hover "+this.data.speedCounters[Number(i)].title);
+        var obj = this.data.speedCounters[Number(i)];
+    },
+    
+    parkingClick : function(i) {
+        console.warn("Clicked "+this.data.parkingSpots[Number(i)].title);
+        var obj = this.data.parkingSpots[Number(i)];
+    },
+    
+    parkingStart: function(i) {
+        console.warn("Starting hover "+this.data.parkingSpots[Number(i)].title);
+        var obj = this.data.parkingSpots[Number(i)];
+        
+        var coord = new MeshmoonGeoCoordinate({ lon: Number(obj.coord[0]), lat: Number(obj.coord[1]) });
+        
+        var elem = document.createElement("div");
+        elem.innerHTML = obj.title+'<br>'+obj.description;
+        var stuff = this.createBillboard(elem, coord.toWorld());
+    },
+    
+    parkingEnd : function(i) {
+        console.warn("Ending hover "+this.data.parkingSpots[Number(i)].title);
+        
+        var obj = this.data.parkingSpots[Number(i)];
+    },
+    
+    cameraClick : function(i) {
+        console.warn("Clicked "+this.data.weatherCameras[Number(i)].title);
+        var obj = this.data.weatherCameras[Number(i)];
+    },
+    
+    cameraStart : function(i) {
+        console.warn("Starting hover "+this.data.weatherCameras[Number(i)].title);
+        var obj = this.data.weatherCameras[Number(i)];
+        var coord = new MeshmoonGeoCoordinate({ lon: Number(obj.coord[0]), lat: Number(obj.coord[1]) });
+        
+        var elem = document.createElement("div");
+        elem.innerHTML = obj.title+'<br><img src="' + obj.link + '" width="256" height="256">';
+        var stuff = this.createBillboard(elem, coord.toWorld(),2,15);
+        
+        this.camerathumbnails[i] = stuff;
+    },
+    
+    cameraEnd : function(i) {
+        console.warn("Ending hover "+this.data.weatherCameras[Number(i)].title);
+        var obj = this.data.weatherCameras[Number(i)];
+    },
+    
+    pedestrianClick : function(i) {
+        console.warn("Clicked "+this.data.trafficCounters[Number(i)].name);
+        var obj = this.data.trafficCounters[Number(i)];
+    },
+    
+    pedestrianStart : function(i) {
+        console.warn("Starting hover "+this.data.trafficCounters[Number(i)].name);
+        var obj = this.data.trafficCounters[Number(i)];
+    },
+    
+    pedestrianEnd : function(i) {
+        console.warn("Ending hover "+this.data.trafficCounters[Number(i)].name);
+        var obj = this.data.trafficCounters[Number(i)];
+    }
+});
+
+// Start the application by instantiating it
+var appInstance = new Test();

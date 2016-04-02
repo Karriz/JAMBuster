@@ -1,0 +1,20 @@
+{
+    "Name": "Test",
+    "NameClean": "Test",
+    "Description": "",
+    "Txml": "scene.txml",
+    "Img": "application.jpg",
+    "SourceDir": "",
+    "DirNameClean": "test",
+    "AssetsDir": "C:/Users/Karri/Documents/mapgets-sdk-windows-amd64/applications/test/files",
+    "SourceWebRocket": "test.webrocketjs",
+    "SourceRocket": "",
+    "CompatibleWebRocket": true,
+    "CompatibleRocket": false,
+    "CompatibleServer": false,
+    "IsMapgetsApp": true,
+    "Layers": null,
+    "QueryParams": {
+        "logdepth": "true"
+    }
+}
