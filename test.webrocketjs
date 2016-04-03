@@ -399,8 +399,12 @@ var Test = MapgetsApplication.$extend(
         this.data.shapeSpeedCounters.add(coords);
     },
     
-    createBillboard: function(elem, pos, minsize, maxsize)
+    createBillboard: function(elem, pos, y)
     {
+        if(typeof y === 'undefined') {
+            y = 10;
+        }
+        
         var entity = Tundra.scene.createLocalEntity(["Placeable", "HtmlBillboard"]);
         if (!entity)
             return null;
@@ -408,7 +412,7 @@ var Test = MapgetsApplication.$extend(
         entity.htmlbillboard.element = elem;
         entity.htmlbillboard.scaleAccordingToDistance = 1/100000;
         entity.htmlbillboard.maxDistance = 30000;
-        entity.htmlbillboard.offset.y = 10;
+        entity.htmlbillboard.offset.y = y;
         entity.htmlbillboard.minScale = 0.5;
         entity.htmlbillboard.maxScale = 10;
         entity.htmlbillboard.fadeOut = false;
@@ -425,7 +429,7 @@ var Test = MapgetsApplication.$extend(
             
             var elem = document.createElement("div");
             elem.innerHTML = obj.name.replace("pois keskustasta","from center").replace("keskustaan", "to center")+"<br>Yesterday: "+amount;
-            elem.style.backgroundColor = 'white';
+            elem.style.backgroundColor = 'pink';
             elem.style.textAlign = "center";
             var stuff = this.createBillboard(elem, coord.toWorld());
 
@@ -457,7 +461,7 @@ var Test = MapgetsApplication.$extend(
         var elem = document.createElement("div");
         elem.innerHTML = obj.title+'<br>'+obj.description.replace("Keskinopeus pohjoiseen","North").replace("Keskinopeus etelään","South");
         
-        elem.style.backgroundColor = 'white';
+        elem.style.backgroundColor = 'orange';
         elem.style.textAlign = "center";
         
         var stuff = this.createBillboard(elem, coord.toWorld());
@@ -493,7 +497,8 @@ var Test = MapgetsApplication.$extend(
         
         var elem = document.createElement("div");
         elem.innerHTML = obj.title+'<br>'+obj.description.replace("Vapaita paikkoja", "Free").replace("Paikkoja yhteensä","Total").replace(/ei tietoa./g, "no info");
-        elem.style.backgroundColor = 'white';
+        elem.style.backgroundColor = 'blue';
+        elem.style.color = 'white';
         elem.style.textAlign = "center";
         var stuff = this.createBillboard(elem, coord.toWorld());
         
@@ -527,9 +532,10 @@ var Test = MapgetsApplication.$extend(
         
         var elem = document.createElement("div");
         elem.innerHTML = obj.title+'<br><img src="' + obj.link + '" width="256" height="256">';
-        elem.style.backgroundColor = 'white';
+        elem.style.backgroundColor = 'green';
+        elem.style.color = 'white';
         elem.style.textAlign = "center";
-        var stuff = this.createBillboard(elem, coord.toWorld(),2,15);
+        var stuff = this.createBillboard(elem, coord.toWorld());
         
         var that = this;
 
