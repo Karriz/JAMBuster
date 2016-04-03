@@ -112,6 +112,8 @@ var Test = MapgetsApplication.$extend(
         
         this.pedestrianinfo = [];
         
+        this.populationinfo = [];
+        
         // traffic counters
         this.updateTrafficCounters();
 
@@ -123,6 +125,19 @@ var Test = MapgetsApplication.$extend(
         
         //speed counters
         this.updateSpeedCounters();
+        
+        this.updatePopulations();
+    },
+    
+    updatePopulations : function() {
+        console.warn("Updating populations");
+        var loc = this.resolveRef("files/populations.json");
+        console.warn(loc);
+        $.getJSON(loc).done(function(data) {
+            console.warn("Found populations");
+            this.data.populations = this.parsePopulations(data);
+            this.showPopulations();
+        }.bind(this));
     },
     
     updateTrafficCounters : function() {
@@ -204,6 +219,20 @@ var Test = MapgetsApplication.$extend(
         return data.ecostation;
     },
     
+    parsePopulations : function(data) {
+        for (var i=0; i<data.neighborhoods.length; i++) {
+            var geom = data.neighborhoods[i].coordinates;
+            
+            geom = geom.split(",");
+            geom[0] = Number(geom[0]);
+            geom[1] = Number(geom[1]);
+            
+            data.neighborhoods[i].coordinates = geom;
+        }
+        return data.neighborhoods;
+    },
+    
+    
     showTrafficCounters : function()
     {
         if (!this.data.shapeTrafficCounters)
@@ -251,6 +280,55 @@ var Test = MapgetsApplication.$extend(
             coords.push( new MeshmoonGeoCoordinate({ lon: obj.geom.coordinates[0], lat: obj.geom.coordinates[1] }) );
         }
         this.data.shapeTrafficCounters.add(coords);
+    },
+    
+    showPopulations : function()
+    {
+        if (!this.data.shapePopulations)
+        {
+            this.data.shapePopulations = new MeshmoonGeoShape({
+                type : "points",           
+                "autoCreateMesh": true,
+                "autoUpdateGeometry": true,
+                "visualizePoints": true,
+                "visualizeLines": true,
+                "visualizeDistances": false,
+                "mainColor": "orange",
+                "activeColor": "#E95D0F",
+                "mainOpacity": 0.5,
+                "pointOpacity": 0.9
+
+            });
+        }
+        else
+            this.data.shapePopulations.clear();
+            
+        var coords = [];
+        for(var i=0; i < this.data.populations.length; i++) {
+            var obj = this.data.populations[i];
+            
+            var coord = new MeshmoonGeoCoordinate({ lat: obj.coordinates[0], lon: obj.coordinates[1] });
+            var elem = document.createElement("div");
+            elem.innerHTML = '<img src="' + this.resolveRef("files/PopulationNumberSign.png") + '" width="24" height="24">';
+            //elem.style.textAlign = "center";
+            var that = this;
+            elem.id = i.toString();
+            /*elem.onclick = function () {
+                that.pedestrianClick(this.id);
+            };*/
+            
+            var stuff = this.createBillboard(elem, coord.toWorld());
+            
+            console.warn(stuff.bbElem);
+            stuff.bbElem.hover(function() {
+                this.that.populationStart(this.index);
+            }.bind({ that : that, index : i }),function() {
+                this.that.populationEnd(this.index);
+            }.bind({ that : that, index : i }));
+            
+            coords.push( new MeshmoonGeoCoordinate({ lat: obj.coordinates[0], lon: obj.coordinates[1] }) );
+        }
+        this.data.shapePopulations.add(coords);
     },
     
     showWeatherCameras : function()
@@ -572,7 +650,39 @@ var Test = MapgetsApplication.$extend(
     pedestrianEnd : function(i) {
         console.warn("Ending hover "+this.data.trafficCounters[Number(i)].name);
         var obj = this.data.trafficCounters[Number(i)];
+    },
+    
+    populationStart : function(i) {
+        console.warn("Starting hover "+this.data.populations[Number(i)].title);
+        var obj = this.data.populations[Number(i)];
+        
+        var coord = new MeshmoonGeoCoordinate({ lat: obj.coordinates[0], lon: obj.coordinates[1] });
+        
+        var elem = document.createElement("div");
+        elem.innerHTML = obj.neighborhood+'<br>Population: '+ obj.population;
+        elem.style.backgroundColor = 'orange';
+        elem.style.color = 'white';
+        elem.style.textAlign = "center";
+        var stuff = this.createBillboard(elem, coord.toWorld());
+        
+        var that = this;
+
+        stuff.bbElem.hover(function() {
+        
+        }.bind({ that : that, index : i }),function() {
+            
+            stuff.entity.parentScene.removeEntity(stuff.entity.id);
+            this.that.populationinfo[i] = undefined;
+            
+        }.bind({ that : that, index : i }));
+        
+        this.populationinfo[i] = stuff;
+    },
+    
+    populationEnd : function(i) {
+        console.warn("population end");
     }
+    
 });
 
 // Start the application by instantiating it

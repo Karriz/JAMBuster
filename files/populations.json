@@ -1,0 +1,517 @@
+{"neighborhoods":[
+  {
+    "neighborhood":"001 I Pokkinen",
+    "coordinates":"65.013056,25.471389",
+    "population":"2331"
+  },
+  {
+    "neighborhood":"002 II Vaara",
+    "coordinates":"65.010556, 25.482778",
+    "population":"2314"
+  },
+  {
+    "neighborhood":"003 III Vanhatulli",
+    "coordinates":"65.008611, 25.469444",
+    "population":"4107"
+  },
+  {
+    "neighborhood":"004 IV Hollihaka",
+    "coordinates":"65.006111, 25.454167",
+    "population":"2658"
+  },
+  {
+    "neighborhood":"005 V Leveri",
+    "coordinates":"65.004722, 25.465 ",
+    "population":"2496"
+  },
+  {
+    "neighborhood":"006 VI Myllytulli",
+    "coordinates":"65.01705,25.483732",
+    "population":"2118"
+  },
+  {
+    "neighborhood":"007 Nuottasaari",
+    "coordinates":"65.003160, 25.438339",
+    "population":"389"
+  },
+  {
+    "neighborhood":"009 Limingantulli",
+    "coordinates":"64.996346, 25.463052",
+    "population":"751"
+  },
+  {
+    "neighborhood":"010 Äimärautio",
+    "coordinates":"64.983358, 25.464550",
+    "population":"2"
+  },
+  {
+    "neighborhood":"011 Inti�",
+    "coordinates":"65.01618, 25.50004",
+    "population":"2443"
+  },
+  {
+    "neighborhood":"012 Raksila",
+    "coordinates":"65.008056, 25.4975",
+    "population":"1799"
+  },
+  {
+    "neighborhood":"013 Karjasilta",
+    "coordinates":"65.001667, 25.493889 ",
+    "population":"3145"
+  },
+  {
+    "neighborhood":"014 Nokela",
+    "coordinates":"64.992479, 25.48532 ",
+    "population":"993"
+  },
+  {
+    "neighborhood":"015 Höyhtyä",
+    "coordinates":"64.994444, 25.496944 ",
+    "population":"1937"
+  },
+  {
+    "neighborhood":"016 Lintula",
+    "coordinates":"64.987952, 25.496671 ",
+    "population":"866"
+  },
+  {
+    "neighborhood":"017 Mäntylä",
+    "coordinates":"64.981944, 25.496667 ",
+    "population":"2033"
+  },
+  {
+    "neighborhood":"018 Peltola",
+    "coordinates":"65.013517, 25.509717",
+    "population":"1660"
+  },
+  {
+    "neighborhood":"019 Kontinkangas",
+    "coordinates":"65.006111, 25.521667 ",
+    "population":"656"
+  },
+  {
+    "neighborhood":"020 Kaukovainio",
+    "coordinates":"64.994700, 25.515024",
+    "population":"4615"
+  },
+  {
+    "neighborhood":"021 Hiironen",
+    "coordinates":"64.984751, 25.514353",
+    "population":"1963"
+  },
+  {
+    "neighborhood":"022 Oulunsuu",
+    "coordinates":"65.003611, 25.549722 ",
+    "population":"4350"
+  },
+  {
+    "neighborhood":"023 V�rtt�",
+    "coordinates":"65.018333, 25.518333 ",
+    "population":"1313"
+  },
+  {
+    "neighborhood":"024 Maikkula",
+    "coordinates":"64.981333, 25.569881",
+    "population":"3571"
+  },
+  {
+    "neighborhood":"025 Knuutila",
+    "coordinates":"62.163463, 25.915326",
+    "population":"1332"
+  },
+  {
+    "neighborhood":"026 Iinatti",
+    "coordinates":"64.972447, 25.579380",
+    "population":"1442"
+  },
+  {
+    "neighborhood":"027 Kaakkuri",
+    "coordinates":"64.968611, 25.541667 ",
+    "population":"6867"
+  },
+  {
+    "neighborhood":"028 Metsokangas",
+    "coordinates":"64.613688, 25.787013",
+    "population":"5422"
+  },
+  {
+    "neighborhood":"030 Kiviniemi",
+    "coordinates":"64.973909, 25.502672",
+    "population":"1695"
+  },
+  {
+    "neighborhood":"031 Perävainio",
+    "coordinates":"64.950137, 25.509980",
+    "population":"549"
+  },
+  {
+    "neighborhood":"032 Madekoski",
+    "coordinates":"64.954007, 25.664775",
+    "population":"378"
+  },
+  {
+    "neighborhood":"033 Heikkilänkangas",
+    "coordinates":"64.966411, 25.617698",
+    "population":"1568"
+  },
+  {
+    "neighborhood":"034 Juurusoja",
+    "coordinates":"64.961985, 25.598376",
+    "population":"148"
+  },
+  {
+    "neighborhood":"035 Pikkarala",
+    "coordinates":"64.912694, 25.763124",
+    "population":"416"
+  },
+  {
+    "neighborhood":"036 Hangaskangas",
+    "coordinates":"64.917193, 25.684922",
+    "population":"11"
+  },
+  {
+    "neighborhood":"040 Ylikiiminki",
+    "coordinates":"65.027812, 26.146497",
+    "population":"1372"
+  },
+  {
+    "neighborhood":"041 Vesala",
+    "coordinates":"65.033843, 26.033805",
+    "population":"945"
+  },
+  {
+    "neighborhood":"042 Veps�",
+    "coordinates":"64.955194, 26.291314",
+    "population":"286"
+  },
+  {
+    "neighborhood":"043 Vuotto",
+    "coordinates":"64.931786, 26.516331",
+    "population":"119"
+  },
+  {
+    "neighborhood":"044 Nuoritta",
+    "coordinates":"65.093604, 26.475839",
+    "population":"234"
+  },
+  {
+    "neighborhood":"045 Jolos",
+    "coordinates":"65.142230, 25.877208",
+    "population":"437"
+  },
+  {
+    "neighborhood":"046 Puolukkakangas",
+    "coordinates":"65.487488, 27.401349",
+    "population":"44"
+  },
+  {
+    "neighborhood":"047 Kivikkokangas",
+    "coordinates":"64.992932, 25.599727",
+    "population":"488"
+  },
+  {
+    "neighborhood":"048 Vanha Hiukkavaara",
+    "coordinates":"65.015317, 25.573151",
+    "population":"201"
+  },
+  {
+    "neighborhood":"050 Pikisaari",
+    "coordinates":"65.017709, 25.454180",
+    "population":"184"
+  },
+  {
+    "neighborhood":"051 Koskikeskus",
+    "coordinates":"65.021770, 25.468258",
+    "population":"625"
+  },
+  {
+    "neighborhood":"052 Tuira",
+    "coordinates":"65.025762, 25.470964",
+    "population":"6754"
+  },
+  {
+    "neighborhood":"055 Hietasaari",
+    "coordinates":"65.021310, 25.432449",
+    "population":"66"
+  },
+  {
+    "neighborhood":"056 Toppilansaari",
+    "coordinates":"65.031133, 25.424015",
+    "population":"1669"
+  },
+  {
+    "neighborhood":"057 Toppila",
+    "coordinates":"65.038198, 25.443286",
+    "population":"4247"
+  },
+  {
+    "neighborhood":"058 Alppila",
+    "coordinates":"65.036086, 25.460169",
+    "population":"2418"
+  },
+  {
+    "neighborhood":"059 Koskela",
+    "coordinates":"65.046722, 25.456754",
+    "population":"3407"
+  },
+  {
+    "neighborhood":"060 V�livainio",
+    "coordinates":"65.033101, 25.471765",
+    "population":"2710"
+  },
+  {
+    "neighborhood":"061 Puolivälinkangas",
+    "coordinates":"65.041713, 25.484435",
+    "population":"3009"
+  },
+  {
+    "neighborhood":"062 Isko",
+    "coordinates":"65.043461, 25.475094",
+    "population":"206"
+  },
+  {
+    "neighborhood":"063 Pyykösjärvi",
+    "coordinates":"65.042300, 25.496459",
+    "population":"1470"
+  },
+  {
+    "neighborhood":"064 Takalaanila",
+    "coordinates":"65.030696, 25.512915",
+    "population":"10"
+  },
+  {
+    "neighborhood":"065 Laanila",
+    "coordinates":"65.023503, 25.506641",
+    "population":"1540"
+  },
+  {
+    "neighborhood":"066 Kynsilehto",
+    "coordinates":"65.029917, 25.532596",
+    "population":"1696"
+  },
+  {
+    "neighborhood":"067 Hintta",
+    "coordinates":"65.027604, 25.525194",
+    "population":"920"
+  },
+  {
+    "neighborhood":"068 Parkkisenkangas",
+    "coordinates":"65.019791, 25.536227",
+    "population":"285"
+  },
+  {
+    "neighborhood":"069 Myllyoja",
+    "coordinates":"65.019410, 25.550784",
+    "population":"2427"
+  },
+  {
+    "neighborhood":"070 Kirkkokangas",
+    "coordinates":"65.003130, 25.568066",
+    "population":"755"
+  },
+  {
+    "neighborhood":"072 Haapalehto",
+    "coordinates":"65.022263, 25.560070",
+    "population":"2463"
+  },
+  {
+    "neighborhood":"074 Taskila",
+    "coordinates":"65.052407, 25.430142",
+    "population":"1262"
+  },
+  {
+    "neighborhood":"075 Rajakylä",
+    "coordinates":"65.065251, 25.419756",
+    "population":"3989"
+  },
+  {
+    "neighborhood":"076 Pateniemi",
+    "coordinates":"65.078732, 25.396778",
+    "population":"4383"
+  },
+  {
+    "neighborhood":"077 Herukka",
+    "coordinates":"65.096837, 25.403076",
+    "population":"3760"
+  },
+  {
+    "neighborhood":"078 Linnanmaa",
+    "coordinates":"65.057093, 25.449074",
+    "population":"3048"
+  },
+  {
+    "neighborhood":"079 Ritaharju",
+    "coordinates":"65.082274, 25.452672",
+    "population":"6113"
+  },
+  {
+    "neighborhood":"080 Kaijonharju",
+    "coordinates":"65.059341, 25.479117",
+    "population":"3830"
+  },
+  {
+    "neighborhood":"081 Kuivasjärvi",
+    "coordinates":"65.069603, 25.495451",
+    "population":"4792"
+  },
+  {
+    "neighborhood":"082 Liikanen",
+    "coordinates":"65.067431, 25.538809",
+    "population":"61"
+  },
+  {
+    "neighborhood":"083 Rusko",
+    "coordinates":"65.048354, 25.535843",
+    "population":"141"
+  },
+  {
+    "neighborhood":"084 Ruskonselkä",
+    "coordinates":"65.051437, 25.581094",
+    "population":"12"
+  },
+  {
+    "neighborhood":"085 Heikinharju",
+    "coordinates":"65.057941, 25.598022",
+    "population":"217"
+  },
+  {
+    "neighborhood":"086 Korvensuora",
+    "coordinates":"65.038654, 25.574215",
+    "population":"2078"
+  },
+  {
+    "neighborhood":"087 Korvenkylä",
+    "coordinates":"65.057185, 25.614918",
+    "population":"104"
+  },
+  {
+    "neighborhood":"088 Saviharju",
+    "coordinates":"65.041389, 25.692611",
+    "population":"101"
+  },
+  {
+    "neighborhood":"089 Saarela",
+    "coordinates":"64.995756, 25.591561",
+    "population":"1254"
+  },
+  {
+    "neighborhood":"090 Talvikangas",
+    "coordinates":"65.044057, 25.589573",
+    "population":"4146"
+  },
+  {
+    "neighborhood":"091 Niiles",
+    "coordinates":"65.015028, 25.655537",
+    "population":"7"
+  },
+  {
+    "neighborhood":"092 Sanginsuu",
+    "coordinates":"64.962482, 25.676641",
+    "population":"248"
+  },
+  {
+    "neighborhood":"096 Ulkosanki",
+    "coordinates":"64.988011, 25.874172",
+    "population":"79"
+  },
+  {
+    "neighborhood":"097 Sanginjoki",
+    "coordinates":"64.980746, 25.702774",
+    "population":"26"
+  },
+  {
+    "neighborhood":"098 Lapinkangas",
+    "coordinates":"64.924386, 25.800549",
+    "population":"242"
+  },
+  {
+    "neighborhood":"120 Haukipudas",
+    "coordinates":"65.175483, 25.351480",
+    "population":"9135"
+  },
+  {
+    "neighborhood":"121 Kello",
+    "coordinates":"65.128353, 25.356899",
+    "population":"6102"
+  },
+  {
+    "neighborhood":"122 Kalimenkyl�",
+    "coordinates":"65.101528, 25.457570",
+    "population":"158"
+  },
+  {
+    "neighborhood":"123 Martinniemi",
+    "coordinates":"65.211042, 25.314978",
+    "population":"2842"
+  },
+  {
+    "neighborhood":"124 Jokikylä",
+    "coordinates":"65.190067, 25.469254",
+    "population":"1109"
+  },
+  {
+    "neighborhood":"130 Kiiminki",
+    "coordinates":"65.127483, 25.774963",
+    "population":"5722"
+  },
+  {
+    "neighborhood":"131 Jääli",
+    "coordinates":"65.098374, 25.714336",
+    "population":"4524"
+  },
+  {
+    "neighborhood":"132 Huttukylä",
+    "coordinates":"65.080961, 25.864901",
+    "population":"548"
+  },
+  {
+    "neighborhood":"133 Välikylä",
+    "coordinates":"65.010720, 25.502733",
+    "population":"608"
+  },
+  {
+    "neighborhood":"134 Alakylä",
+    "coordinates":"65.082213, 25.545552",
+    "population":"1733"
+  },
+  {
+    "neighborhood":"135 Hannus",
+    "coordinates":"65.173303, 25.964701",
+    "population":"246"
+  },
+  {
+    "neighborhood":"140 Oulunsalo",
+    "coordinates":"64.939816, 25.429009",
+    "population":"8438"
+  },
+  {
+    "neighborhood":"141 Kylänpuoli",
+    "coordinates":"64.919320, 25.389979",
+    "population":"227"
+  },
+  {
+    "neighborhood":"142 Salonpää",
+    "coordinates":"64.965574, 25.252158",
+    "population":"1181"
+  },
+  {
+    "neighborhood":"150 Yli-Ii",
+    "coordinates":"65.372222, 25.840278 ",
+    "population":"1101"
+  },
+  {
+    "neighborhood":"151 Jakkukylä",
+    "coordinates":"65.312723, 25.607237",
+    "population":"654"
+  },
+  {
+    "neighborhood":"152 Tannila",
+    "coordinates":"65.485592, 25.981631",
+    "population":"209"
+  },
+  {
+    "neighborhood":"153 Pahkala",
+    "coordinates":"65.355975, 25.992383",
+    "population":"134"
+  }
+]}
