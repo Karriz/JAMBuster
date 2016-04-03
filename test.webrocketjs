@@ -363,7 +363,7 @@ var Test = MapgetsApplication.$extend(
                 "visualizePoints": true,
                 "visualizeLines": true,
                 "visualizeDistances": false,
-                "mainColor": "orange",
+                "mainColor": "red",
                 "activeColor": "#E95D0F",
                 "mainOpacity": 0.5,
                 "pointOpacity": 0.9
@@ -460,8 +460,8 @@ var Test = MapgetsApplication.$extend(
         
         var elem = document.createElement("div");
         elem.innerHTML = obj.title+'<br>'+obj.description.replace("Keskinopeus pohjoiseen","North").replace("Keskinopeus etelään","South");
-        
-        elem.style.backgroundColor = 'orange';
+        elem.style.color = 'white'
+        elem.style.backgroundColor = 'red';
         elem.style.textAlign = "center";
         
         var stuff = this.createBillboard(elem, coord.toWorld());
