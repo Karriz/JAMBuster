@@ -107,9 +107,13 @@ var Test = MapgetsApplication.$extend(
         }}
         );*/
         this.camerathumbnails = [];
+        this.parkinginfo = [];
+        this.speedinfo = [];
+        
+        this.pedestrianinfo = [];
         
         // traffic counters
-        //this.updateTrafficCounters();
+        this.updateTrafficCounters();
 
         // weather cameras
         this.updateWeatherCameras();
@@ -211,7 +215,7 @@ var Test = MapgetsApplication.$extend(
                 "visualizePoints": true,
                 "visualizeLines": true,
                 "visualizeDistances": false,
-                "mainColor": "red",
+                "mainColor": "pink",
                 "activeColor": "#E95D0F",
                 "mainOpacity": 0.5,
                 "pointOpacity": 0.9
@@ -260,7 +264,7 @@ var Test = MapgetsApplication.$extend(
                 "visualizePoints": true,
                 "visualizeLines": true,
                 "visualizeDistances": false,
-                "mainColor": "blue",
+                "mainColor": "green",
                 "activeColor": "#E95D0F",
                 "mainOpacity": 0.5,
                 "pointOpacity": 0.9
@@ -309,7 +313,7 @@ var Test = MapgetsApplication.$extend(
                 "visualizePoints": true,
                 "visualizeLines": true,
                 "visualizeDistances": false,
-                "mainColor": "green",
+                "mainColor": "blue",
                 "activeColor": "#E95D0F",
                 "mainOpacity": 0.5,
                 "pointOpacity": 0.9
@@ -414,6 +418,31 @@ var Test = MapgetsApplication.$extend(
         return { entity : entity, bbElem : entity.htmlbillboard.element };
     },
     
+    createPedestrianInfoBillboard : function(obj,coord,i) {
+        var that = this;
+        $.getJSON("http://www.oulunliikenne.fi/public_traffic_api/eco_traffic/eco_counter_daydata.php?measurementPointId="+obj.id+"&daysFromHistory=1").done(function(data) {
+            var amount = data.ecoCounterDayResults.value;
+            
+            var elem = document.createElement("div");
+            elem.innerHTML = obj.name.replace("pois keskustasta","from center").replace("keskustaan", "to center")+"<br>Yesterday: "+amount;
+            elem.style.backgroundColor = 'white';
+            elem.style.textAlign = "center";
+            var stuff = this.createBillboard(elem, coord.toWorld());
+
+            stuff.bbElem.hover(function() {
+            
+            }.bind({ that : that, index : i }),function() {
+                
+                stuff.entity.parentScene.removeEntity(stuff.entity.id);
+                this.that.pedestrianinfo[i] = undefined;
+                
+            }.bind({ that : that, index : i }));
+            
+            this.pedestrianinfo[i] = stuff;
+        }.bind(this));
+    
+    },
+    
     speedClick : function(i) {
         console.warn("Clicked "+this.data.speedCounters[Number(i)].title);
         var obj = this.data.speedCounters[Number(i)];
@@ -426,13 +455,29 @@ var Test = MapgetsApplication.$extend(
         var coord = new MeshmoonGeoCoordinate({ lon: Number(obj.coord[0]), lat: Number(obj.coord[1]) });
         
         var elem = document.createElement("div");
-        elem.innerHTML = obj.title+'<br>'+obj.description;
+        elem.innerHTML = obj.title+'<br>'+obj.description.replace("Keskinopeus pohjoiseen","North").replace("Keskinopeus etelään","South");
+        
+        elem.style.backgroundColor = 'white';
+        elem.style.textAlign = "center";
+        
         var stuff = this.createBillboard(elem, coord.toWorld());
+        
+        var that = this;
+
+        stuff.bbElem.hover(function() {
+        
+        }.bind({ that : that, index : i }),function() {
+            
+            stuff.entity.parentScene.removeEntity(stuff.entity.id);
+            this.that.speedinfo[i] = undefined;
+            
+        }.bind({ that : that, index : i }));
+        
+        this.speedinfo[i] = stuff;
     },
     
     speedEnd : function(i) {
-        console.warn("Ending hover "+this.data.speedCounters[Number(i)].title);
-        var obj = this.data.speedCounters[Number(i)];
+
     },
     
     parkingClick : function(i) {
@@ -447,14 +492,27 @@ var Test = MapgetsApplication.$extend(
         var coord = new MeshmoonGeoCoordinate({ lon: Number(obj.coord[0]), lat: Number(obj.coord[1]) });
         
         var elem = document.createElement("div");
-        elem.innerHTML = obj.title+'<br>'+obj.description;
+        elem.innerHTML = obj.title+'<br>'+obj.description.replace("Vapaita paikkoja", "Free").replace("Paikkoja yhteensä","Total").replace(/ei tietoa./g, "no info");
+        elem.style.backgroundColor = 'white';
+        elem.style.textAlign = "center";
         var stuff = this.createBillboard(elem, coord.toWorld());
+        
+        var that = this;
+
+        stuff.bbElem.hover(function() {
+        
+        }.bind({ that : that, index : i }),function() {
+            
+            stuff.entity.parentScene.removeEntity(stuff.entity.id);
+            this.that.parkinginfo[i] = undefined;
+            
+        }.bind({ that : that, index : i }));
+        
+        this.parkinginfo[i] = stuff;
     },
     
     parkingEnd : function(i) {
-        console.warn("Ending hover "+this.data.parkingSpots[Number(i)].title);
-        
-        var obj = this.data.parkingSpots[Number(i)];
+
     },
     
     cameraClick : function(i) {
@@ -469,14 +527,26 @@ var Test = MapgetsApplication.$extend(
         
         var elem = document.createElement("div");
         elem.innerHTML = obj.title+'<br><img src="' + obj.link + '" width="256" height="256">';
+        elem.style.backgroundColor = 'white';
+        elem.style.textAlign = "center";
         var stuff = this.createBillboard(elem, coord.toWorld(),2,15);
+        
+        var that = this;
+
+        stuff.bbElem.hover(function() {
+        
+        }.bind({ that : that, index : i }),function() {
+            
+            stuff.entity.parentScene.removeEntity(stuff.entity.id);
+            this.that.camerathumbnails[i] = undefined;
+            
+        }.bind({ that : that, index : i }));
         
         this.camerathumbnails[i] = stuff;
     },
     
     cameraEnd : function(i) {
-        console.warn("Ending hover "+this.data.weatherCameras[Number(i)].title);
-        var obj = this.data.weatherCameras[Number(i)];
+
     },
     
     pedestrianClick : function(i) {
@@ -487,6 +557,10 @@ var Test = MapgetsApplication.$extend(
     pedestrianStart : function(i) {
         console.warn("Starting hover "+this.data.trafficCounters[Number(i)].name);
         var obj = this.data.trafficCounters[Number(i)];
+        
+        var coord = new MeshmoonGeoCoordinate({ lon: Number(obj.geom.coordinates[0]), lat: Number(obj.geom.coordinates[1]) });
+        
+        this.createPedestrianInfoBillboard(obj,coord,i);
     },
     
     pedestrianEnd : function(i) {
